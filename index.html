@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>절대평가 계산기</title>
+  
+  <style>
+    .inline-block {
+      display: inline-block;
+      margin-right: 10px; 
+        }
+  </style>
+
+  <script>
+    var middle_grade;
+    var middle_per;
+    var side_grade;
+    var side_per;
+    var final_per;
+    var final_grade;
+    var Anan;
+
+    function grade(test_name) {
+      var v_grade = parseInt(prompt(test_name + " 점수를 입력하세요(100점만점 기준):"));
+      if (!isNaN(v_grade)) {
+        return v_grade;
+      } else {
+        alert('잘못 입력하셨습니다');
+        return grade(test_name);
+      }
+    }
+
+    function per(test_name) {
+      var v_per = parseInt(prompt(test_name + " 반영비율을 입력하세요(단위 : %):"));
+      if (!isNaN(v_per)) {
+        return v_per;
+      } else {
+        alert('잘못 입력하셨습니다');
+        return per(test_name);
+      }
+    }
+
+    function middle() {
+      var middle_OX = prompt("중간 고사 침? (예, 아니요로 대답하기)");
+      if (middle_OX === "예") {
+        middle_grade = grade("중간고사");
+        middle_per = per("중간고사");
+        document.getElementById("result1").innerHTML = "중간고사 점수: " + middle_grade + ", 중간고사 반영비율: " + middle_per;
+      } else if (middle_OX === "아니요") {
+        middle_grade = 0;
+        middle_per = 0;
+        document.getElementById("result1").innerHTML = "중간고사 안침";
+      } else {
+        alert('잘못 입력하셨습니다');
+        return middle();
+      }
+
+      document.getElementById("modifyBtn1").style.display = "inline-block";
+    }
+
+    function side() {
+      var side_OX = prompt("수행평가 만점? (예, 아니요로 대답하기)");
+      if (side_OX === "예") {
+        side_grade = 100;
+        side_per = per("수행평가");
+        document.getElementById("result2").innerHTML = "수행평가 점수: " + side_grade + ", 수행평가 반영비율: " + side_per;
+      } else if (side_OX === "아니요") {
+        side_grade = grade("수행평가");
+        side_per = per("수행평가");
+        document.getElementById("result2").innerHTML = "수행평가 점수: " + side_grade + ", 수행평가 반영비율: " + side_per;
+      } else {
+        alert('잘못 입력하셨습니다');
+        return side();
+      }
+
+      document.getElementById("modifyBtn2").style.display = "inline-block";
+    }
+
+    function final() {
+      final_per = per("기말고사");
+      document.getElementById("result3").innerHTML = "기말고사 반영 비율: " + final_per;
+
+      document.getElementById("modifyBtn3").style.display = "inline-block";
+    }
+
+    function Ana() {
+      Anan = grade("A 하한선 점수");
+      document.getElementById("result4").innerHTML = "A 하한선 점수: " + Anan;
+
+      document.getElementById("modifyBtn4").style.display = "inline-block";
+    }
+
+    function cal() {
+      var adding = middle_per + side_per + final_per;
+      if (adding === 100) {
+      var final_grade;
+      final_grade = (Anan - middle_grade * (middle_per/100) - side_grade * (side_per/100)) / (final_per/100);
+      document.getElementById("final_grade").value = final_grade;
+      }
+      else {alert("반영 비율을 확인해주세요(총합이 100이 되어야함)")}
+    }
+
+    function reset() {
+      document.getElementById("result1").innerHTML = "";
+      document.getElementById("result2").innerHTML = "";
+      document.getElementById("result3").innerHTML = "";
+      document.getElementById("result4").innerHTML = "";
+      document.getElementById("final_grade").value = "";
+
+      document.getElementById("modifyBtn1").style.display = "none";
+      document.getElementById("modifyBtn2").style.display = "none";
+      document.getElementById("modifyBtn3").style.display = "none";
+      document.getElementById("modifyBtn4").style.display = "none";
+    }
+
+   
+  </script>
+</head>
+
+<body>
+  <button onclick="middle()">중간고사 정보(입력(또는 수정)을 원하시면 클릭하세요)</button> 
+  <div id="result1" class="result1"></div> 
+  <br>
+  <button onclick="side()">수행평가 정보(입력(또는 수정)을 원하시면 클릭하세요)</button> 
+  <div id="result2" class="result2"></div> 
+  <br>
+  <button onclick="final()">기말고사 정보(입력(또는 수정)을 원하시면 클릭하세요)</button>  
+  <div id="result3" class="result3"></div>  
+  <br>
+  <button onclick="Ana()">A최하점(입력(또는 수정)을 원하시면 클릭하세요)</button>  
+  <div id="result4" class="result4"></div>   
+  <br><br>
+  <input type="button" value="계산하기" onclick="cal()">
+  <input type="button" value="초기화" onclick="reset()">
+  <br><br>
+  기말 최하 점수: <input type="text" id="final_grade">
+</body>
+</html>
